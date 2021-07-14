@@ -1,38 +1,122 @@
-.App {
+*,
+:after,
+:before {
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+}
+body {
+  font-family: "Times New Roman", Times, serif;
+}
+table td input {
+  font-size: 1rem !important;
+  background: none !important;
+  width: auto !important;
+  border: none !important;
+}
+table td input:focus {
+  border: black solid 2px !important;
+  border-radius: 5px !important;
+}
+td{
   text-align: center;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+tr:not(#tr1) {
+  height: 100px;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+input:disabled{
+  color:rgb(0, 0, 0);
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+span {
+  padding: 0.2rem;
+  color: black;
+  cursor: pointer;
+}
+td textarea {
+  border: none;
+  resize: none;
+  width: 250px;
+}
+div {
+  margin-bottom: 2rem;
+  position: relative;
+}
+.common {
+  position: absolute;
+  left: 0;
+}
+.main-form {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: 2rem;
+}
+.err {
+  margin: auto;
+  height: 50px;
+  text-align: center;
+}
+div > .err-value {
+  margin-top: 20px;
+  color: red;
+  font-size: 1.5rem;
+}
+.common p {
+  color: red;
+  font-size: 1rem;
+  margin-top: 0.2rem;
+}
+label {
+  width: 200px;
 }
 
-.App-link {
-  color: #61dafb;
+input:not([type="checkbox"], [type="radio"]),
+select {
+  width: 400px;
+  /* height: 30px; */
+  font-size: 1.5rem;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid green;
+  background: rgb(200, 237, 182);
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+input[type="submit"] {
+  border: 1px solid black;
+}
+select {
+  height: auto;
+}
+textarea {
+  font-size: 1.5rem;
+  width: 500px;
+  height: 150px;
+  outline: none;
+  border: 1px solid green;
+}
+input::placeholder {
+  font-size: 1rem;
+  letter-spacing: 0.2rem;
+  padding-left: 1rem;
+}
+select option {
+  font-size: 2rem;
+}
+input[type="checkbox"] {
+  font-size: 2rem;
+}
+.danger {
+  border: none;
+  border-bottom: 1px solid red !important;
+}
+table,
+th,
+td {
+  border-collapse: collapse;
+  border: 1px black solid;
+}
+table {
+  width: 100%;
+}
+th,
+td {
+  padding: 5px;
 }
