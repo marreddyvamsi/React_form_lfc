@@ -27,6 +27,11 @@ const reducer = (state = initialState, action) => {
 
     return { ...state, formfield: { ...state.formfield, [name]: value } };
   }
+  if (action.type === "DEL") {
+    let { id } = action.payload;
+    console.log(id);
+    return { ...state };
+  }
   if (action.type === "SDATA") {
     const { sdata } = action.payload;
     return { ...state, states: [...sdata] };

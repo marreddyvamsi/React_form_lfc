@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Table from "./Table";
 import { connect } from "react-redux";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 
@@ -6,10 +7,10 @@ import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import "./App.css";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { errEmail: "", errName: "", errText: "" };
-  }
+  // constructor(props) {
+  //   super(props);
+  //   // this.state = { errEmail: "", errName: "", errText: "" };
+  // }
   onchangeHandler = (e) => {
     let { name, value } = e.target;
     if (name === "state") {
@@ -32,55 +33,15 @@ class App extends Component {
     }
     // this.setState({ [name]: value });
   };
-  validateForm = (name) => {
-    let isValid = true;
-    if (name === "name") {
-      isValid = this.validateName();
-    }
-    if (name === "email") {
-      isValid = this.validateEmail();
-    }
-    if (name === "textarea") {
-      isValid = this.validateText();
-    }
-    return isValid;
-  };
-  validateName() {
-    let { name } = this.state;
-    if (name === "") {
-      this.setState({ errName: "Name Can't Be Empty" });
-    } else if (name.length < 3) {
-      this.setState({ errName: "Name is Too Short" });
-    } else {
-      this.setState({ errName: "" });
-    }
-    return this.state.errName === "";
-  }
-  validateEmail() {
-    let { email } = this.state;
-    if (email === "") {
-      this.setState({ errEmail: "Email Can't Be Empty" });
-    } else if (!/^[a-zA-Z]+([._0-9]+)?[@][a-z]+[.][a-z]{2,3}$/.test(email)) {
-      this.setState({ errEmail: "Invalid Email" });
-    } else {
-      this.setState({ errEmail: "" });
-    }
-    return this.state.errEmail === "";
-  }
-  validateText() {
-    let { textarea } = this.state;
-    if (textarea === "") {
-      this.setState({ errText: "TextArea Can't Be Empty" });
-    } else {
-      this.setState({ errText: "" });
-    }
-    return this.state.errText === "";
-  }
+  
   // onblurHandler = (e) => {
   //   let { name } = e.target;
 
   //    this.validateForm(name);
   // };
+  updateLocalStorage(data) {
+    localStorage.setItem("table", JSON.stringify(data));
+  }
   submitHandler(e) {
     e.preventDefault();
 
@@ -98,7 +59,7 @@ class App extends Component {
       pincode,
     };
     let table = [...this.props.tableArray, newData];
-    localStorage.setItem("table", JSON.stringify(table));
+    this.updateLocalStorage(table);
 
     this.props.dispatch({
       type: "SUBMIT",
@@ -113,7 +74,7 @@ class App extends Component {
     let table = this.props.tableArray.filter(
       (row) => Number(row.id) !== Number(id)
     );
-    localStorage.setItem("table", JSON.stringify(table));
+    this.updateLocalStorage(table);
   };
   onchangeTable = (e) => {
     let id = e.target.parentElement.parentElement.id;
@@ -125,6 +86,7 @@ class App extends Component {
 
     console.log(name, value);
   };
+
   onblurTable = (e) => {
     console.log(e.target);
     e.target.disabled = true;
@@ -137,9 +99,11 @@ class App extends Component {
     xhr.withCredentials = true;
     xhr.addEventListener("readystatechange", function () {
       if (this.readyState === this.DONE) {
-        cdata = JSON.parse(this.responseText);
-        console.log(cdata);
-        dispatch({ type: "CDATA", payload: { cdata } });
+        if (this.responseText) {
+          cdata = JSON.parse(this.responseText);
+
+          dispatch({ type: "CDATA", payload: { cdata } });
+        }
       }
     });
     xhr.open(
@@ -154,22 +118,26 @@ class App extends Component {
     xhr.send(data);
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.tableArray.length !== prevProps.tableArray.length) {
+      this.updateLocalStorage(this.props.tableArray);
+    }
+  }
   componentDidMount() {
     const data = null;
     let sdata = [];
     let dispatch = this.props.dispatch;
-    console.log(this);
 
     const xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
 
     xhr.addEventListener("readystatechange", function () {
-      console.log(this);
       if (this.readyState === this.DONE) {
-        console.log(this);
-        sdata = JSON.parse(this.responseText);
-        console.log(sdata);
-        dispatch({ type: "SDATA", payload: { sdata } });
+        if (this.responseText) {
+          sdata = JSON.parse(this.responseText);
+
+          dispatch({ type: "SDATA", payload: { sdata } });
+        }
       }
     });
 
@@ -206,7 +174,7 @@ class App extends Component {
             <div>
               <label htmlFor="name">Name: </label>
               <input
-                className={this.state.errName ? "danger" : null}
+                // className={this.state.errName ? "danger" : null}
                 type="text"
                 name="name"
                 id="name"
@@ -217,11 +185,11 @@ class App extends Component {
                 required={true}
                 autoComplete="off"
               />
-              {this.state.errName && (
+              {/* {this.state.errName && (
                 <div className="common">
                   <p>{this.state.errName}</p>
                 </div>
-              )}
+              )} */}
             </div>
             <div>
               <label htmlFor="email">Email: </label>
@@ -235,11 +203,11 @@ class App extends Component {
                 required={true}
                 autoComplete="off"
               />
-              {this.state.errEmail && (
+              {/* {this.state.errEmail && (
                 <div className="common">
                   <p>{this.state.errEmail}</p>
                 </div>
-              )}
+              )} */}
             </div>
             <div>
               <label htmlFor="number">Phone: </label>
@@ -253,11 +221,11 @@ class App extends Component {
                 required={true}
                 autoComplete="off"
               />
-              {this.state.errEmail && (
+              {/* {this.state.errEmail && (
                 <div className="common">
                   <p>{this.state.errEmail}</p>
                 </div>
-              )}
+              )} */}
             </div>
             <div>
               <label htmlFor="state">State: </label>
@@ -292,7 +260,7 @@ class App extends Component {
                 <option value="">--select-city--</option>
                 {cities.length > 0 &&
                   cities.map((city) => {
-                    return <option>{city.value}</option>;
+                    return <option key={city.key}>{city.value}</option>;
                   })}
               </select>
             </div>
@@ -307,11 +275,11 @@ class App extends Component {
                 onChange={this.onchangeHandler}
                 onBlur={this.onblurHandler}
               ></textarea>
-              {this.state.errText && (
+              {/* {this.state.errText && (
                 <div className="common">
                   <p>{this.state.errText}</p>
                 </div>
-              )}
+              )} */}
             </div>
             <div>
               <label htmlFor="pincode">Pincode:</label>
@@ -325,11 +293,11 @@ class App extends Component {
                 required={true}
                 autoComplete="off"
               />
-              {this.state.errEmail && (
+              {/* {this.state.errEmail && (
                 <div className="common">
                   <p>{this.state.errEmail}</p>
                 </div>
-              )}
+              )} */}
             </div>
             <div>
               <label htmlFor="male">Male</label>
@@ -358,7 +326,8 @@ class App extends Component {
             </div>
           </form>
         </div>
-        <div>
+        <Table />
+        {/* <div>
           {tableArray.length > 0 && (
             <table>
               <thead>
@@ -450,7 +419,7 @@ class App extends Component {
                             value={`${address}`}
                             name="address"
                             onChange={this.onchangeTable}
-                          /> */}
+                          /> }
                           </td>
                           <td>
                             <input
@@ -478,7 +447,7 @@ class App extends Component {
               </tbody>
             </table>
           )}
-        </div>
+        </div> */}
       </div>
     );
   }
